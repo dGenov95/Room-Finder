@@ -7,7 +7,6 @@ namespace RoomFinder.util
 {
     public class TransitionDependentPathFinder : AbstractPathFinder
     {
-        private IBuilding building;
         private string avoidedTransitionType;
 
         public TransitionDependentPathFinder(IBuilding building, string avoidedTransitionType) : base(building)

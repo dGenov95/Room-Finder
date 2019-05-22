@@ -26,7 +26,13 @@ namespace RoomFinder.util.path_finder_template
             {
                 return false;
             }
-
+            foreach (var transition in building.GetTransitions())
+            {
+                if(transition.FromRoom == from && transition.ToRoom == to)
+                {
+                   
+                }
+            }
             return false;
         }
 

@@ -8,58 +8,63 @@ namespace RoomFinder
     public class Building : IBuilding
     {
 
-        public ISet<Room> Rooms { get; set; }
-        public List<Transition> Transitions { get; set; }
+        private ISet<Room> rooms;
+        private List<Transition> transitions;
 
         public Building()
         {
             //default constructor
-            Rooms = new HashSet<Room>();
-            Transitions = new List<Transition>();
+            rooms = new HashSet<Room>();
+            transitions = new List<Transition>();
         }
 
         public Building(ISet<Room> rooms, List<Transition> transitions)
         {
-            Rooms = rooms;
-            Transitions = transitions;
+            this.rooms = rooms;
+            this.transitions = transitions;
         }
 
         public List<Room> FindRoomsByFloorNumber(int floorNumber)
         {
-            return Rooms.Where(room => room.FloorNumber == floorNumber).ToList();
+            return rooms.Where(room => room.FloorNumber == floorNumber).ToList();
         }
 
         public ISet<Room> GetRooms()
         {
-           return Rooms;
+           return rooms;
+        }
+
+        public List<Transition> GetTransitions()
+        {
+            return transitions;
         }
 
 
         public void AddTransition(Transition transition)
         {
-            Transitions.Add(transition);
+            transitions.Add(transition);
         }
 
         public void AddRoom(Room room)
         {
-            Rooms.Add(room);
+            rooms.Add(room);
         }
 
         public Room FindRoomByRoomNumber(int roomNumber)
         {
-           return Rooms.Where(room => room.Number == roomNumber).FirstOrDefault();
+           return rooms.Where(room => room.Number == roomNumber).FirstOrDefault();
         }
 
         public override string ToString()
         {
             var result = new StringBuilder();
             result.AppendLine("\n|Rooms in the building:|");
-            foreach (var room in Rooms)
+            foreach (var room in rooms)
             {
                 result.AppendLine("----------").AppendLine(room.ToString());
             }
             result.AppendLine("\n|Transitions in the building:|");
-            foreach (var transition in Transitions)
+            foreach (var transition in transitions)
             {
                 result.AppendLine("-----------").AppendLine(transition.ToString());
             }
