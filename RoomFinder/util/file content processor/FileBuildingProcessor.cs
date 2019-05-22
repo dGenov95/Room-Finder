@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RoomFinder
 {
@@ -11,17 +9,25 @@ namespace RoomFinder
      * If the file contents valid, for the two types of input, lines the user can receive
      * as a result the structures representing them, otherwise empty structures will be returned.
      */
-    public class FileContentProcessor
+    public class FileBuildingProcessor
     {
-        public IBuilding Building { get; set; }
+        private IBuilding building;
+        private string[] fileContent;
 
-        public FileContentProcessor(string[] fileContent)
+        public FileBuildingProcessor(string[] fileContent)
         {
-            Building = new Building();
-            ProcessFileContent(fileContent);
+            building = new Building();
+            this.fileContent = fileContent;
         }
 
-        private void ProcessFileContent(string[] fileContent)
+
+        public IBuilding GetBuilding()
+        {
+            ProcessFileContent();
+            return building;
+        }
+
+        private void ProcessFileContent()
         {
             foreach (var line in fileContent)
             {
@@ -45,7 +51,7 @@ namespace RoomFinder
             var yCoordinate = int.Parse(roomDetails[2]);
             var floorNumber = int.Parse(roomDetails[3]);
             var roomType = roomDetails[4];
-            Building.AddRoom(new Room(roomNumber, xCoordinate, yCoordinate, floorNumber, roomType));
+            building.AddRoom(new Room(roomNumber, xCoordinate, yCoordinate, floorNumber, roomType));
         }
 
         private void ProcessTranzitionLine(string line)
@@ -56,7 +62,7 @@ namespace RoomFinder
             var transitionType= tranzitionDetails[2];
             var moveCost = int.Parse(tranzitionDetails[3]);
             var isBidirectional = tranzitionDetails[4].Equals("yes") == true ? true : false;
-            Building.AddTransition(new Transition(fromRoom, toRoom, transitionType, moveCost, isBidirectional));
+            building.AddTransition(new Transition(fromRoom, toRoom, transitionType, moveCost, isBidirectional));
         }
 
         private bool IsRoom(string line)
@@ -68,6 +74,5 @@ namespace RoomFinder
         {
             return line.Contains("walk") || line.Contains("climb") || line.Contains("lift");
         }
-
     }
 }
