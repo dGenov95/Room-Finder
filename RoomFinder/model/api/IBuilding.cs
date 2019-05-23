@@ -10,9 +10,9 @@ namespace RoomFinder
     public interface IBuilding
     {
         ISet<Room> GetRooms();
-        List<Transition> GetTransitions();
+        List<Transition> GetTransitionsForRoom(int roomNumber);
         void AddRoom(Room room);
-        void AddTransition(Transition transition);
+        void AddTransition(int roomNumber,Transition transition);
         List<Room> FindRoomsByFloorNumber(int floorNumber);
         Room FindRoomByRoomNumber(int roomNumber);
     }

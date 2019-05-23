@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RoomFinder
+﻿namespace RoomFinder
 {
     public class Room
     {
@@ -29,11 +25,11 @@ namespace RoomFinder
 
         public override string ToString()
         {
-            return "Room - "+ Number 
-                + "\nX - " + XCoordinate 
-                + "\nY - "+ YCoordinate 
-                + "\nFloor - " + FloorNumber 
-                +"\nType - " + RoomType;
+            return "Room - " + Number
+                + " X - " + XCoordinate
+                + " Y - " + YCoordinate
+                + " Floor - " + FloorNumber
+                + " Type - " + RoomType;
         }
     }
 }

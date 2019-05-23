@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -9,16 +8,16 @@ namespace RoomFinder
     {
 
         private ISet<Room> rooms;
-        private List<Transition> transitions;
+        private Dictionary<int, List<Transition>> transitions;
 
         public Building()
         {
             //default constructor
             rooms = new HashSet<Room>();
-            transitions = new List<Transition>();
+            transitions = new Dictionary<int, List<Transition>>();
         }
 
-        public Building(ISet<Room> rooms, List<Transition> transitions)
+        public Building(ISet<Room> rooms, Dictionary<int, List<Transition>> transitions)
         {
             this.rooms = rooms;
             this.transitions = transitions;
@@ -31,18 +30,25 @@ namespace RoomFinder
 
         public ISet<Room> GetRooms()
         {
-           return rooms;
+            return rooms;
         }
 
-        public List<Transition> GetTransitions()
+        public List<Transition> GetTransitionsForRoom(int roomNumber)
         {
-            return transitions;
+            return transitions.GetValueOrDefault(roomNumber, new List<Transition>());
         }
 
 
-        public void AddTransition(Transition transition)
+        public void AddTransition(int roomNumber, Transition transition)
         {
-            transitions.Add(transition);
+            if (transitions.ContainsKey(roomNumber))
+            {
+                transitions[roomNumber].Add(transition);
+            }
+            else
+            {
+                transitions.Add(roomNumber, new List<Transition> { transition });
+            }
         }
 
         public void AddRoom(Room room)
@@ -52,7 +58,7 @@ namespace RoomFinder
 
         public Room FindRoomByRoomNumber(int roomNumber)
         {
-           return rooms.Where(room => room.Number == roomNumber).FirstOrDefault();
+            return rooms.Where(room => room.Number == roomNumber).FirstOrDefault();
         }
 
         public override string ToString()
@@ -62,11 +68,6 @@ namespace RoomFinder
             foreach (var room in rooms)
             {
                 result.AppendLine("----------").AppendLine(room.ToString());
-            }
-            result.AppendLine("\n|Transitions in the building:|");
-            foreach (var transition in transitions)
-            {
-                result.AppendLine("-----------").AppendLine(transition.ToString());
             }
             return result.ToString();
         }

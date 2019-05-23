@@ -1,5 +1,6 @@
 ﻿
 using RoomFinder.util;
+using RoomFinder.util.path_finder;
 using System;
 using System.IO;
 using System.Reflection;
@@ -36,6 +37,7 @@ namespace RoomFinder
             }
             else
             {
+                Console.WriteLine("There was a problem processing the building data...");
                 this.building = null;
             }
             
@@ -43,10 +45,15 @@ namespace RoomFinder
 
         private void ProcessUserInput()
         {
+            if(building == null)
+            {
+                return;
+            }
+
             Console.Write("Enter which room you are currently at: ");
-            var roomFromInput = int.TryParse(Console.ReadLine(), out int roomFrom);
+            var roomFromInput = int.TryParse(Console.ReadLine(), out int sourceRoomNumber);
             Console.Write("Enter which room you would like to go to: ");
-            var roomInput = int.TryParse(Console.ReadLine(), out int roomToGoTo);
+            var roomInput = int.TryParse(Console.ReadLine(), out int destinationRoomNumber);
             Console.Write("Choose the finding strategy: ");
             var strategyInput = int.TryParse(Console.ReadLine(), out int findingStrategy);
             IPathFinder pathFinder = null;
@@ -54,18 +61,29 @@ namespace RoomFinder
             {
                 case 1:
                     Console.Write("You picked up a transition dependent finding strategy," +
-                        " please choose the transition type to avoid: ");
-                    var avoidedTransitionType = Console.ReadLine();
+                        " please choose the transition types to avoid, separated by comma and space: ");
+                    var avoidedTransitionType = Console.ReadLine().Split(", ");
                     pathFinder = new TransitionDependentPathFinder(building, avoidedTransitionType);
                     break;
                 case 2:
+                    Console.WriteLine("You picked up a least effort room finding strategy.");
+                    pathFinder = new LeastEffortPathFinder(building);
                     break;
                 case 3:
+                    Console.WriteLine("You picked up a lift based room finding strategy");
+                    pathFinder = new LiftMovingPathFinder(building);
                     break;
                 default:
                     Console.WriteLine("Finding strategy not supported.");
                     break;
             }
+
+            if(pathFinder == null)
+            {
+                return;
+            }
+            pathFinder.PrintPath(sourceRoomNumber,destinationRoomNumber);
+
         }
     }
 }

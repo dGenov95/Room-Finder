@@ -9,6 +9,6 @@ namespace RoomFinder.util
      */
     public interface IPathFinder
     {
-        bool FindPath(int from, int to);
+        void PrintPath(int sourceRoomNumber, int destinationRoomNumber);
     }
 }

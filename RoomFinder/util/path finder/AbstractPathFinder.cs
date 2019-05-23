@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace RoomFinder.util.path_finder_template
 {
@@ -13,32 +12,50 @@ namespace RoomFinder.util.path_finder_template
     public abstract class AbstractPathFinder : IPathFinder
     {
 
-        private IBuilding building;
+        protected IBuilding building;
+        protected List<Room> visitedRooms;
 
         protected AbstractPathFinder(IBuilding building)
         {
             this.building = building;
+            visitedRooms = new List<Room>();
         }
 
-        public bool FindPath(int from, int to)
+        public void PrintPath(int sourceRoomNumber, int destinationRoomNumber)
         {
-            if (!areRoomsExisting(from, to))
+            if (!IsRoomInBuilding(sourceRoomNumber) || !IsRoomInBuilding(destinationRoomNumber))
             {
-                return false;
+                Console.WriteLine("One or both of the rooms do not exist");
+                return;
             }
-            foreach (var transition in building.GetTransitions())
+
+            int lastRoomNumber = FindRoom(sourceRoomNumber, destinationRoomNumber);
+            if (lastRoomNumber != destinationRoomNumber)
             {
-                if(transition.FromRoom == from && transition.ToRoom == to)
-                {
-                   
-                }
+                Console.WriteLine("Sorry there seems to be no path between those two rooms, using this strategy");
             }
-            return false;
         }
 
-        private bool areRoomsExisting(int fromRoom, int toRoom)
+        protected int FindRoom(int sourceRoomNumber, int destinationRoomNumber)
         {
-            return building.FindRoomByRoomNumber(fromRoom) != null && building.FindRoomByRoomNumber(toRoom) != null;
+            Room sourceRoom = building.FindRoomByRoomNumber(sourceRoomNumber);
+            Room destinationRoom = building.FindRoomByRoomNumber(destinationRoomNumber);
+            if (sourceRoom.Equals(destinationRoom))
+            {
+                Console.WriteLine("You are at your destination: " + destinationRoom);
+                return destinationRoomNumber;
+            }
+
+            TraverseRoomTransitions(sourceRoomNumber, destinationRoomNumber);
+
+            return -1;
+        }
+
+        internal abstract void TraverseRoomTransitions(int sourceRoomNumber, int destinationRoomNumber);
+
+        protected bool IsRoomInBuilding(int roomNumber)
+        {
+            return building.FindRoomByRoomNumber(roomNumber) != null;
         }
     }
 }

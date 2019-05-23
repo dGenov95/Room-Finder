@@ -61,8 +61,14 @@ namespace RoomFinder
             var toRoom = int.Parse(tranzitionDetails[1]);
             var transitionType= tranzitionDetails[2];
             var moveCost = int.Parse(tranzitionDetails[3]);
-            var isBidirectional = tranzitionDetails[4].Equals("yes") == true ? true : false;
-            building.AddTransition(new Transition(fromRoom, toRoom, transitionType, moveCost, isBidirectional));
+            var isBidirectional = tranzitionDetails[4].Equals("yes");
+
+            building.AddTransition(fromRoom,new Transition(fromRoom, toRoom, transitionType, moveCost, isBidirectional));
+
+            if (isBidirectional)
+            {
+                building.AddTransition(toRoom, new Transition(toRoom, fromRoom, transitionType, moveCost, isBidirectional));
+            }
         }
 
         private bool IsRoom(string line)
