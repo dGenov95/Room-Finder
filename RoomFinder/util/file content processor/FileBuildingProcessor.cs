@@ -31,6 +31,7 @@ namespace RoomFinder
         {
             foreach (var line in fileContent)
             {
+                line.Replace(';', ' ').Trim();
                 if(IsRoom(line))
                 {
                     ProcessRoomLine(line);

@@ -43,12 +43,12 @@ namespace RoomFinder.util.path_finder_template
             if (sourceRoom.Equals(destinationRoom))
             {
                 Console.WriteLine("You are at your destination: " + destinationRoom);
+                visitedRooms.Remove(sourceRoom);
                 return destinationRoomNumber;
             }
 
             TraverseRoomTransitions(sourceRoomNumber, destinationRoomNumber);
-
-            return -1;
+            return sourceRoomNumber;
         }
 
         internal abstract void TraverseRoomTransitions(int sourceRoomNumber, int destinationRoomNumber);

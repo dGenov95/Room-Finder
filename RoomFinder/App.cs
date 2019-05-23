@@ -31,7 +31,7 @@ namespace RoomFinder
             if (File.Exists(path))
             {
                 //split the file content based on the new line delimeter
-                var fileLines = File.ReadAllText(path).Trim().Split(";\r\n");
+                var fileLines = File.ReadAllLines(path);
                 this.building = new FileBuildingProcessor(fileLines).GetBuilding();
                 Console.WriteLine(building);
             }
